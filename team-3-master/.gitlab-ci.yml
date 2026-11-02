@@ -1,0 +1,46 @@
+image: maven:3.9.9-eclipse-temurin-21
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+stages:
+  - build
+  - test
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end"
+
+cache:
+  key: maven-cache
+  paths:
+    - .m2/repository
+
+.maven-job:
+  interruptible: true
+  before_script:
+    - cd underground_guild
+
+maven-build:
+  extends: .maven-job
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+  artifacts:
+    when: always
+    paths:
+      - underground_guild/target
+
+maven-test:
+  extends: .maven-job
+  stage: test
+  needs:
+    - job: maven-build
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    paths:
+      - underground_guild/target/surefire-reports

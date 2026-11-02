@@ -1,0 +1,32 @@
+# Maven and Java build output
+underground_guild/target/
+*.class
+out/
+
+# IDE metadata
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local Maven dependency cache (also used by GitLab CI)
+.m2/
+
+# Runtime saves and logs
+.underground-guild-saves/
+*.ser
+*.log
+hs_err_pid*
+
+# Local credentials and environment overrides
+.env
+.env.*
+!.env.example
+*.key
+*.pem
